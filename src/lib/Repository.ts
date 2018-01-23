@@ -3,8 +3,8 @@
 import * as fs from 'fs'
 
 export enum RepositoryTypes {
-    SVN = 'SVN',
-    GIT = 'GIT'
+    SVN = 'Svn',
+    GIT = 'Git'
 }
 
 interface RepositoryConfig {
@@ -25,6 +25,7 @@ export class Repository implements IRepository {
     private config:RepositoryConfig;
     constructor(config:RepositoryConfig) {
         this.config = config;
+        
     }
     private isLocalExist() : boolean {
         return fs.existsSync(this.config.localPath);
