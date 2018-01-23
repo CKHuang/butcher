@@ -17,11 +17,11 @@ interface RepositoryConfig {
 }
 
 interface IRepository {
-    checkout():boolean,
-    update():boolean
+    checkout():Promise<boolean>,
+    update():Promise<boolean>
 }
 
-export class Repository {
+export class Repository implements IRepository {
     private config:RepositoryConfig;
     constructor(config:RepositoryConfig) {
         this.config = config;
@@ -29,10 +29,14 @@ export class Repository {
     private isLocalExist() : boolean {
         return fs.existsSync(this.config.localPath);
     }
-    checkout() {
-
+    checkout():Promise<boolean> {
+        return new Promise((resolve,reject) => {
+            resolve(true);
+        })
     }
-    update() {
-        
+    update():Promise<boolean> {
+        return new Promise((resolve,reject) => {
+            resolve(true);
+        })
     }
 }
