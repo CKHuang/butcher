@@ -20,7 +20,7 @@ export default class GitClient extends ClientBase implements IClientBase {
         return new Promise((resolve,reject) => {
             if ( me.isLocalExist() ) {
                 debug.info('GitClient.checkout isLocalExist true');
-                let error = new ExtError('[GitClient] local repository is Exits');
+                let error = new ExtError('[GitClient] local repository is exist');
                     error.args = me.rep.remotePath;
                 reject(error);
             } else {
@@ -32,9 +32,9 @@ export default class GitClient extends ClientBase implements IClientBase {
                     this.rep.localPath
                 ];
                 me.invoke(args)
-                  .then(function(data:InvokeRes){
-                      resolve();
-                  }).catch(function(error:ExtError){
+                  .then((data:InvokeRes) => {
+                      resolve(data);
+                  }).catch((error:ExtError) => {
                       reject(error);
                   });
             }
@@ -42,7 +42,25 @@ export default class GitClient extends ClientBase implements IClientBase {
     }
     update():Promise<any> {
         let me = this;
+        debug.info('GitClient.update');
         return new Promise((resolve,reject) => {
+            if ( !me.isLocalExist() ) {
+                debug.info('GitClient.update isLocalExist false');
+                let error = new ExtError('[GitClient] local repository is not exist');
+                    error.args = me.rep.localPath;
+                reject(error);
+            } else {
+                debug.info('GitClient.update isLocalExist true');
+                let args = [
+                    'pull'
+                ];
+                me.invoke(args,{cwd:me.rep.localPath})
+                  .then((data:InvokeRes) => {
+                      resolve(data);
+                  }).catch((error:ExtError) => {
+                      reject(error);
+                  })
+            }
 
         });
     }

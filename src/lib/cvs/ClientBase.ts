@@ -36,6 +36,10 @@ export interface InvokeRes {
     error:string[]
 }
 
+interface InvokeOpts {
+    cwd?:string
+}
+
 export class ClientBase {
     private type : ClientTypes;
     protected rep : Repository;
@@ -45,7 +49,7 @@ export class ClientBase {
     private isInvokeError(res:InvokeRes) : boolean {
         return res.error.length > 0 ? true : false;
     }
-    protected invoke(args:string[]) : Promise<InvokeRes> {
+    protected invoke(args:string[],opts?:InvokeOpts) : Promise<InvokeRes> {
         let me = this;
         return new Promise((resolve,reject) => {
             debug.start('ClientBase.invoke',{args:{type:me.type,args:args}});
@@ -55,11 +59,11 @@ export class ClientBase {
             const isError = me.isInvokeError;
             ls.stdout.on('data', (data:string) => {
                 debug.info('ClientBase.invoke on(data):',data);
-                _data.push(data);
+                _data.push(data.toString());
             });
             ls.stderr.on('error', (error:string) => {
                 debug.info('ClientBase.invoke on(error):',error);
-                _err.push(error);
+                _err.push(error.toString());
             });
             ls.on('close', (code) => {
                 debug.info('ClientBase.invoke on(close):',code);
