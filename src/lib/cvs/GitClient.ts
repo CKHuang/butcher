@@ -7,7 +7,6 @@ import { resolve } from 'url';
 import debug from '../debug'
 
 export default class GitClient extends ClientBase implements IClientBase {
-    private rep:Repository
     constructor(rep:Repository) {
         super(ClientTypes.GIT);
         this.rep = rep;

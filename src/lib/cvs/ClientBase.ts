@@ -36,6 +36,7 @@ export interface InvokeRes {
 
 export class ClientBase {
     private type : ClientTypes;
+    protected rep : Repository;
     constructor(type:ClientTypes) {
         this.type = type;
     }
