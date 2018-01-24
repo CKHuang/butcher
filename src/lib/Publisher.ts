@@ -1,4 +1,0 @@
-class Publisher {
-    create() {}
-    publish() {}
-}

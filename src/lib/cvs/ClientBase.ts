@@ -1,5 +1,14 @@
+'use strict'
+
 import { spawn } from 'child_process'
 import ExtError from '../ExtError'
+
+enum ErrorCode {
+    UNKNOW = 999,
+    DISCONNECT = 1000,
+    EXIT = 1001,
+    EXEERROR = 1002,
+}
 
 export enum ClientTypes {
     GIT = 'git',
@@ -7,8 +16,9 @@ export enum ClientTypes {
 }
 
 export interface IClientBase {
-    checkout():any
-    update():any
+    checkout():Promise<any>
+    update():Promise<any>
+    isLocalExist():boolean
 }
 
 export interface Repository {
@@ -50,15 +60,32 @@ export class ClientBase {
                 if ( isError(res) ) {
                     let error = new ExtError('throw error message');
                         error.args = res;
+                        error.code = ErrorCode.EXEERROR;
                     reject(error);
                 } else {
                     resolve(res);
                 }
             });
             ls.on('error',(err) => {
+                ls.kill();
                 let error = new ExtError(err);
-                reject(error);
+                    error.code = ErrorCode.EXEERROR;
+                reject(error);  
             })
+            ls.on('disconnect',() => {
+                ls.kill();
+                let error = new ExtError(me.type + ' disconnect');
+                    error.args = args;
+                    error.code = ErrorCode.DISCONNECT;
+                reject(error);
+            });
+            ls.on('exit',(code) => {
+                ls.kill();
+                let error = new ExtError(me.type + ' exit[code:' + code + ']' );
+                    error.args = args;
+                    error.code = ErrorCode.EXIT;
+                reject(error);
+            });
         });
     }
 }

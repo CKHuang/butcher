@@ -1,14 +1,12 @@
-'use strict'
-
 export default class ExtError {
-    private _error:Error
-    private _args:any
-    private _code:number
+    private _error:Error;
+    private _args:any;
+    private _code:number;
     constructor(e:Error|string) {
         this.error = e;
     }
     get error() {
-        return this._error
+        return this._error;
     }
     set error(e:Error|string) {
         if ( e instanceof Error ) {
@@ -21,13 +19,13 @@ export default class ExtError {
         return this._args;
     }
     set args(mixed:any) {
-        this.args = mixed;
+        this._args = mixed;
     }
 
     get code() {
         return this._code;
     }
     set code(code:number) {
-        this.code = code;
+        this._code = code;
     }
 }
