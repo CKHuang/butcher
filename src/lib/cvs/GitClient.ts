@@ -11,32 +11,30 @@ export default class GitClient extends ClientBase implements IClientBase {
         super(ClientTypes.GIT);
         this.rep = rep;
     }
-    isLocalExist():boolean {
+    isLocalExist() : boolean {
         return fs.existsSync(this.rep.localPath);
     }
     checkout():Promise<any> {
         let me = this;
-        debug('GitClient checkout');
+        debug.info('GitClient.checkout');
         return new Promise((resolve,reject) => {
             if ( me.isLocalExist() ) {
-                debug('GitClient isLocalExist true');
+                debug.info('GitClient.checkout isLocalExist true');
                 let error = new ExtError('[GitClient] local repository is Exits');
-                    error.args = this.rep.remotePath;
+                    error.args = me.rep.remotePath;
                 reject(error);
             } else {
-                debug('GitClient isLocalExist false');
+                debug.info('GitClient.checkout isLocalExist false');
                 let rep = 'http://' + me.rep.username + ':' + me.rep.password + '@' + me.rep.remotePath.replace(/(https:\/\/|http:\/\/)/,'');
                 let args = [
                     'clone',
-                    rep
+                    rep,
+                    this.rep.localPath
                 ];
-                debug('ClientBase invoke : ',JSON.stringify(args));
                 me.invoke(args)
                   .then(function(data:InvokeRes){
-                      debug('ClientBase invoke success : ',JSON.stringify(data));
                       resolve();
                   }).catch(function(error:ExtError){
-                     debug('ClientBase invoke fail : ',JSON.stringify(error));
                       reject(error);
                   });
             }

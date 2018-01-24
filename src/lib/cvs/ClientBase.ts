@@ -2,6 +2,8 @@
 
 import { spawn } from 'child_process'
 import ExtError from '../ExtError'
+import * as fs from 'fs'
+import debug from '../debug'
 
 enum ErrorCode {
     UNKNOW = 999,
@@ -46,17 +48,21 @@ export class ClientBase {
     protected invoke(args:string[]) : Promise<InvokeRes> {
         let me = this;
         return new Promise((resolve,reject) => {
+            debug.start('ClientBase.invoke',{args:{type:me.type,args:args}});
             const ls = spawn(me.type,args);
             const _data : string[] = [];
             const _err : string[] = [];
             const isError = me.isInvokeError;
             ls.stdout.on('data', (data:string) => {
+                debug.info('ClientBase.invoke on(data):',data);
                 _data.push(data);
             });
             ls.stderr.on('error', (error:string) => {
+                debug.info('ClientBase.invoke on(error):',error);
                 _err.push(error);
             });
             ls.on('close', (code) => {
+                debug.info('ClientBase.invoke on(close):',code);
                 let res : InvokeRes = { data : _data, error : _err }
                 if ( isError(res) ) {
                     let error = new ExtError('throw error message');
@@ -68,12 +74,14 @@ export class ClientBase {
                 }
             });
             ls.on('error',(err) => {
+                debug.info('ClientBase.invoke on(error):',err);
                 ls.kill();
                 let error = new ExtError(err);
                     error.code = ErrorCode.EXEERROR;
                 reject(error);  
             })
             ls.on('disconnect',() => {
+                debug.info('ClientBase.invoke on(disconnect)');
                 ls.kill();
                 let error = new ExtError(me.type + ' disconnect');
                     error.args = args;
@@ -81,11 +89,18 @@ export class ClientBase {
                 reject(error);
             });
             ls.on('exit',(code) => {
-                ls.kill();
-                let error = new ExtError(me.type + ' exit[code:' + code + ']' );
-                    error.args = args;
-                    error.code = ErrorCode.EXIT;
-                reject(error);
+                debug.info('ClientBase.invoke on(exit):',code);
+                debug.end('ClientBase.invoke',{res:code});
+                if ( code == 0 ) {
+                    let res : InvokeRes = { data : _data, error : _err }
+                    resolve(res);
+                } else {
+                    ls.kill();
+                    let error = new ExtError(me.type + ' exit[code:' + code + ']' );
+                        error.args = args;
+                        error.code = ErrorCode.EXIT;
+                    reject(error);
+                }
             });
         });
     }

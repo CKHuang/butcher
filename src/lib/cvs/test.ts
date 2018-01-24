@@ -2,9 +2,9 @@ import GitClient from './GitClient'
 
 let rep = {
     name: 'hook',
-    username : 'xxx',
-    password : 'xxx',
-    remotePath : 'xxxxx',
+    username : 'xxxx',
+    password : 'xxxxx',
+    remotePath : 'xxxx',
     localPath : "xxxx"
 }
 
