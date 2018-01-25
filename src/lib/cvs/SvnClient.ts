@@ -17,36 +17,42 @@ export default class SvnClient extends ClientBase implements IClientBase {
     }
     checkout():Promise<any> {
         let me = this;
-        debug.info('SvnClient.checkout');
         return new Promise((resolve,reject) => {
-            if ( me.isLocalExist() ) {
-                let error = new ExtError('[SvnClient.checkout] isLocalExist true');
-                    error.args = me.rep.remotePath;
-                reject(error);
-            } else {
-                debug.info('[SvnClient.checkout isLocalExist false]');
-                let args = [
-                    'co',
-                    me.rep.remotePath,
-                    me.rep.localPath,
-                    '--username',
-                    me.rep.username,
-                    '--password',
-                    me.rep.password
-                ];
-                me.invoke(args)
-                  .then((data:InvokeRes) => {
-                      resolve(data);
-                  }).catch((error:ExtError) => {
-                      reject(error);
-                  })
-            }
+            debug.info('SvnClient.checkout');
+            let args = [
+                'co',
+                me.rep.remotePath,
+                me.rep.localPath,
+                '--username',
+                me.rep.username,
+                '--password',
+                me.rep.password
+            ];
+            me.invoke(args)
+                .then((data:InvokeRes) => {
+                    resolve(data);
+                }).catch((error:ExtError) => {
+                    reject(error);
+                })
         });
     }
     update():Promise<any> {
         let me = this;
         return new Promise((resolve,reject) => {
-
+            debug.info('SvnClient.update');
+            let args = [
+                'update',
+                '--username',
+                me.rep.username,
+                '--password',
+                me.rep.password
+            ];
+            me.invoke(args,{cwd:me.rep.localPath})
+              .then((data:InvokeRes) => {
+                  resolve(data);
+              }).catch((error:ExtError) => {
+                  reject(error);
+              });
         });
     }
 }
