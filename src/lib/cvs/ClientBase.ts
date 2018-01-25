@@ -52,8 +52,8 @@ export class ClientBase {
     protected invoke(args:string[],opts?:InvokeOpts) : Promise<InvokeRes> {
         let me = this;
         return new Promise((resolve,reject) => {
-            debug.start('ClientBase.invoke',{args:{type:me.type,args:args}});
-            const ls = spawn(me.type,args);
+            debug.start('ClientBase.invoke',{args:{type:me.type,args:{args:args,opts:opts}}});
+            const ls = typeof opts == 'object' ? spawn(me.type,args,opts) : spawn(me.type,args);
             const _data : string[] = [];
             const _err : string[] = [];
             const isError = me.isInvokeError;

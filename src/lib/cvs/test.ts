@@ -1,23 +1,26 @@
 import GitClient from './GitClient'
+import SvnClient from './SvnClient'
+import * as path from 'path'
 
-let rep = {
-    name: 'hook',
-    username : 'xxxxx',
-    password : 'xxxx',
-    remotePath : 'xxx',
-    localPath : "xxxx"
-}
+let rep = require('../../../config');
 
-let git = new GitClient(rep);
-    git.checkout()
+// let git = new GitClient(rep);
+//     git.checkout()
+//        .then(() => {
+//             console.log('[Checkout done]');
+//        }).catch((error) => {
+//             console.log('[Checkout fail]',error);
+//        });
+//     git.update()
+//        .then((data) => {
+//            console.log('[Update done]',data)
+//        }).catch((error) => {
+//            console.log('[Update fail]',error);
+//        })
+let svn = new SvnClient(rep.svn);
+    svn.checkout()
        .then(() => {
-            console.log('[Checkout done]');
+           console.log('[Checkout done]');
        }).catch((error) => {
-            console.log('[Checkout fail]',error);
-       });
-    // git.update()
-    //    .then((data) => {
-    //        console.log('[Update done]',data)
-    //    }).catch((error) => {
-    //        console.log('[Update fail]',error);
-    //    })
+           console.log('[Checkout fail]',error);
+       })

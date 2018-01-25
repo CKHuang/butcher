@@ -52,7 +52,9 @@ export default class GitClient extends ClientBase implements IClientBase {
             } else {
                 debug.info('GitClient.update isLocalExist true');
                 let args = [
-                    'pull'
+                    'pull',
+                    'origin', 
+                    'master'
                 ];
                 me.invoke(args,{cwd:me.rep.localPath})
                   .then((data:InvokeRes) => {

@@ -1,6 +1,6 @@
 'use strict'
 
-import { ClientBase, IClientBase, Repository, ClientTypes } from "./ClientBase";
+import { ClientBase, IClientBase, Repository, ClientTypes, InvokeRes } from "./ClientBase";
 import debug from '../debug'
 import ExtError from "../ExtError";
 import * as fs from 'fs'
@@ -17,13 +17,29 @@ export default class SvnClient extends ClientBase implements IClientBase {
     }
     checkout():Promise<any> {
         let me = this;
+        debug.info('SvnClient.checkout');
         return new Promise((resolve,reject) => {
             if ( me.isLocalExist() ) {
-                let error = new ExtError('[SvnClient] local repository is Exits');
+                let error = new ExtError('[SvnClient.checkout] isLocalExist true');
                     error.args = me.rep.remotePath;
                 reject(error);
             } else {
-               
+                debug.info('[SvnClient.checkout isLocalExist false]');
+                let args = [
+                    'co',
+                    me.rep.remotePath,
+                    me.rep.localPath,
+                    '--username',
+                    me.rep.username,
+                    '--password',
+                    me.rep.password
+                ];
+                me.invoke(args)
+                  .then((data:InvokeRes) => {
+                      resolve(data);
+                  }).catch((error:ExtError) => {
+                      reject(error);
+                  })
             }
         });
     }
