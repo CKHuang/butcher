@@ -15,38 +15,20 @@ export default class GitClient extends ClientBase implements IClientBase {
         return fs.existsSync(this.rep.localPath);
     }
     checkout():Promise<any> {
-        let me = this;
-        return new Promise((resolve,reject) => {
-            debug.info('GitClient.checkout');
-            let rep = 'http://' + me.rep.username + ':' + me.rep.password + '@' + me.rep.remotePath.replace(/(https:\/\/|http:\/\/)/,'');
-            let args = [
-                'clone',
-                rep,
-                this.rep.localPath
-            ];
-            me.invoke(args)
-                .then((data:InvokeRes) => {
-                    resolve(data);
-                }).catch((error:ExtError) => {
-                    reject(error);
-                });
-        });
+        debug.info('GitClient.checkout');
+        let rep = 'http://' + this.rep.username + ':' + this.rep.password + '@' + this.rep.remotePath.replace(/(https:\/\/|http:\/\/)/,'');
+        return this.invoke([
+            'clone',
+            rep,
+            this.rep.localPath
+        ]);
     }
     update():Promise<any> {
-        let me = this;
-        return new Promise((resolve,reject) => {
-            debug.info('GitClient.update');
-            let args = [
-                'pull',
-                'origin', 
-                'master'
-            ];
-            me.invoke(args,{cwd:me.rep.localPath})
-                .then((data:InvokeRes) => {
-                    resolve(data);
-                }).catch((error:ExtError) => {
-                    reject(error);
-                })
-        });
+        debug.info('GitClient.update');
+        return this.invoke([
+            'pull',
+            'origin', 
+            'master' 
+        ])
     }
 }

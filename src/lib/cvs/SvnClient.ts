@@ -16,43 +16,26 @@ export default class SvnClient extends ClientBase implements IClientBase {
         return fs.existsSync(this.rep.localPath);
     }
     checkout():Promise<any> {
-        let me = this;
-        return new Promise((resolve,reject) => {
-            debug.info('SvnClient.checkout');
-            let args = [
-                'co',
-                me.rep.remotePath,
-                me.rep.localPath,
-                '--username',
-                me.rep.username,
-                '--password',
-                me.rep.password
-            ];
-            me.invoke(args)
-                .then((data:InvokeRes) => {
-                    resolve(data);
-                }).catch((error:ExtError) => {
-                    reject(error);
-                })
-        });
+        debug.info('SvnClient.checkout');
+        return this.invoke([
+            'co',
+            this.rep.remotePath,
+            this.rep.localPath,
+            '--username',
+            this.rep.username,
+            '--password',
+            this.rep.password
+        ]);
     }
     update():Promise<any> {
         let me = this;
-        return new Promise((resolve,reject) => {
-            debug.info('SvnClient.update');
-            let args = [
-                'update',
-                '--username',
-                me.rep.username,
-                '--password',
-                me.rep.password
-            ];
-            me.invoke(args,{cwd:me.rep.localPath})
-              .then((data:InvokeRes) => {
-                  resolve(data);
-              }).catch((error:ExtError) => {
-                  reject(error);
-              });
-        });
+        debug.info('SvnClient.update');
+        return this.invoke([
+            'update',
+            '--username',
+            me.rep.username,
+            '--password',
+            me.rep.password
+        ]);
     }
 }
