@@ -17,5 +17,21 @@ export default {
      * 本地克隆项目的存放路径
      * @string
      */
-    localProjsPath : path.join(__dirname,'../projs')
+    localProjsPath : path.join(__dirname,'../projs'),
+    /**
+     * 默认的git账号和密码
+     * @object{username,password}
+     */
+    gitAccount : {
+        username : 'HelloWorld',
+        password : 'hello123'
+    },
+    /**
+     * 默认的svn账号和密码
+     * @object{username,password}
+     */
+    svnAccount : {
+        username : 'HelloWorld',
+        password : 'hello123'
+    }
 }

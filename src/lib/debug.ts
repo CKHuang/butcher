@@ -27,7 +27,6 @@ let debug = {
     },
     start(action:string,ext?:InvokeInput) {
         let args = ext && ext.args ? JSON.stringify(ext.args) : "";
-        //this._print('[STR]','Act:'+action,'Args:'+args);
         _debugCache[action] = {
             sExt:ext,
             st:Date.now()
