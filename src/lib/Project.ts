@@ -8,6 +8,8 @@ import config from '../config/app'
 import Code from '../config/code'
 import { Repository } from './cvs/ClientBase';
 import ExtError from './ExtError';
+import { resolve } from 'url';
+import { Task } from './Task';
 
 interface IProject {
     // initialize(remotePath:string):Promise<boolean>
@@ -19,7 +21,7 @@ export enum ProjectTypes {
 }
 
 export class Project extends EventEmitter implements IProject {
-    private cvs:GitClient|SvnClient|null = null;
+    private cvs:GitClient|SvnClient;
     private type:ProjectTypes;
     constructor(type:ProjectTypes,remotePath:string) {
         super();
@@ -44,5 +46,29 @@ export class Project extends EventEmitter implements IProject {
             });
         }
         return this;
+    }
+    buildLocalRep() : Promise<any> {
+        const me = this;
+        return new Promise((resolve,reject) => {
+            if ( me.cvs.isLocalExist() ) {
+                resolve();
+            } else {
+                me.cvs.checkout()
+                  .then(function(){
+                      resolve();
+                  }).catch(function(error){
+                      reject(error);
+                  });
+            }
+        });
+    }
+    runTasks() {
+        const taskConfig:any[] = [];
+        const tasks:Task[] = [];
+        taskConfig.forEach(function(item){
+            tasks.push(
+                new Task()
+            )
+        });
     }
 }
