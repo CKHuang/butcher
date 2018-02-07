@@ -12,12 +12,16 @@ class Install {
     constructor() {}
     run() {
         this.buildProjsFolder();
+        this.checkCvs();
     }
     buildProjsFolder() {
         const localProjsPath = config.localProjsPath;
         if ( !fs.existsSync(localProjsPath) ) {
             debug.info('[Install] buildProjsFolder localProjsPath : '+localProjsPath+' is not exists');
         }
+    }
+    checkCvs() {
+
     }
 }
 
