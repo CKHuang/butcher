@@ -7,7 +7,9 @@ interface InvokeOutput {
     res?:any
 }
 
+
 let _debugCache:any = {};
+
 
 let debug = {
     _print(...args:any[]) {
