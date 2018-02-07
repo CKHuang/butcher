@@ -5,7 +5,7 @@
  * 执行 : node ./install
  */
 import config from './config/app'
-import debug from './lib/debug'
+//import debug from './lib/debug'
 import * as fs from 'fs'
 
 class Install {
@@ -17,7 +17,7 @@ class Install {
     buildProjsFolder() {
         const localProjsPath = config.localProjsPath;
         if ( !fs.existsSync(localProjsPath) ) {
-            debug.info('[Install] buildProjsFolder localProjsPath : '+localProjsPath+' is not exists');
+            //debug.info('[Install] buildProjsFolder localProjsPath : '+localProjsPath+' is not exists');
         }
     }
     checkCvs() {
