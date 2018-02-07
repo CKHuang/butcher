@@ -1,15 +1,8 @@
 "use strict";
 
 import * as Router from 'koa-router';
+import * as Koa from 'koa';
 
-const router = new Router();
-
-router.get('/project', (ctx,next) =>  {
+export default function(app:Koa) {
     
-});
-
-router.get('/project/:pid', (ctx,next) => {
-
-});
-
-export default router;
+}
