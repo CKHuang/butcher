@@ -4,7 +4,7 @@ import { ClientBase, ClientTypes, IClientBase, Repository, InvokeRes } from './C
 import * as fs from 'fs'
 import ExtError from '../ExtError'
 import { resolve } from 'url';
-import debug from '../debug'
+import { Logger } from '../../Logger'
 
 export default class GitClient extends ClientBase implements IClientBase {
     constructor(rep:Repository) {
@@ -15,7 +15,7 @@ export default class GitClient extends ClientBase implements IClientBase {
         return fs.existsSync(this.rep.localPath);
     }
     checkout():Promise<any> {
-        debug.info('GitClient.checkout');
+        Logger.info('GitClient.checkout');
         let rep = 'http://' + this.rep.username + ':' + this.rep.password + '@' + this.rep.remotePath.replace(/(https:\/\/|http:\/\/)/,'');
         return this.invoke([
             'clone',
@@ -24,7 +24,7 @@ export default class GitClient extends ClientBase implements IClientBase {
         ]);
     }
     update():Promise<any> {
-        debug.info('GitClient.update');
+        Logger.info('GitClient.update');
         return this.invoke([
             'pull',
             'origin', 

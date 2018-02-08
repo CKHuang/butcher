@@ -1,7 +1,7 @@
 'use strict'
 
 import { ClientBase, IClientBase, Repository, ClientTypes, InvokeRes } from "./ClientBase";
-import debug from '../debug'
+import { Logger } from '../../Logger'
 import ExtError from "../ExtError";
 import * as fs from 'fs'
 
@@ -16,7 +16,7 @@ export default class SvnClient extends ClientBase implements IClientBase {
         return fs.existsSync(this.rep.localPath);
     }
     checkout():Promise<any> {
-        debug.info('SvnClient.checkout');
+        Logger.info('SvnClient.checkout');
         return this.invoke([
             'co',
             this.rep.remotePath,
@@ -29,7 +29,7 @@ export default class SvnClient extends ClientBase implements IClientBase {
     }
     update():Promise<any> {
         let me = this;
-        debug.info('SvnClient.update');
+        Logger.info('SvnClient.update');
         return this.invoke([
             'update',
             '--username',

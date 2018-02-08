@@ -6,6 +6,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import config from '../config/app';
 import { isError } from 'util';
+import { Logger, LoggerLevel } from '../utils/Logger'
 
 const routerRoot = config.routerRoot;
 
@@ -20,6 +21,8 @@ function parseRouterFiles(routerRoot:string) : string[] {
  
     const files = fs.readdirSync(routerRoot);
     let list : string[] = [];
+    
+    Logger.info( LoggerLevel.SYS , typeof files );
 
     for ( let file in files ) {
         if ( fs.statSync( path.resolve(routerRoot,file) ).isDirectory() ) {
@@ -36,6 +39,8 @@ function parseRouterFiles(routerRoot:string) : string[] {
 export default function(app:Koa) {
     
     let routerFiles = parseRouterFiles(routerRoot);
+
+    Logger.info( LoggerLevel.SYS , routerFiles );
 
     if ( routerFiles.length == 0 ) {
         let error = new Error('no any router');

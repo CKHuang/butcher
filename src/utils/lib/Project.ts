@@ -3,9 +3,9 @@
 import * as EventEmitter from 'events'
 import GitClient from './cvs/GitClient';
 import SvnClient from './cvs/SvnClient';
-import debug from './debug';
-import config from '../config/app'
-import Code from '../config/code'
+import { Logger } from '../Logger';
+import config from '../../config/app'
+import Code from '../Code'
 import { Repository } from './cvs/ClientBase';
 import ExtError from './ExtError';
 import { resolve } from 'url';
@@ -26,9 +26,9 @@ export class Project extends EventEmitter implements IProject {
     constructor(type:ProjectTypes,remotePath:string) {
         super();
         this.type = type;
-        debug.info('project init CVS');
-        debug.info('remotePath : ' + remotePath);
-        debug.info('type : ' + this.type);
+        Logger.info('project init CVS');
+        Logger.info('remotePath : ' + remotePath);
+        Logger.info('type : ' + this.type);
         switch( this.type ) {
             case 'Svn' : this.cvs = new SvnClient({
                 name : 'Default',
