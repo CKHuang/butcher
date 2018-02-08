@@ -8,10 +8,15 @@ import config from '../config/app';
 import { isError } from 'util';
 import { Logger, LoggerLevel } from '../utils/Logger'
 
+interface IRouterFile {
+    path:string,
+    name:string
+}
+
 const routerRoot = config.routerRoot;
 
 // 自动解析路由文件
-function parseRouterFiles(routerRoot:string) : string[] {
+function parseRouterFiles(routerRoot:string) : IRouterFile[] {
 
     const isExist = fs.existsSync(routerRoot);
     if ( !isExist ) {
@@ -20,16 +25,14 @@ function parseRouterFiles(routerRoot:string) : string[] {
     }
  
     const files = fs.readdirSync(routerRoot);
-    let list : string[] = [];
-    
-    Logger.info( LoggerLevel.SYS , typeof files );
+    let list : IRouterFile[] = [];
 
-    for ( let file in files ) {
+    for ( let file of files ) {
         if ( fs.statSync( path.resolve(routerRoot,file) ).isDirectory() ) {
             let _path = path.resolve(routerRoot,file);
             list = list.concat( parseRouterFiles( _path ) );
         } else {
-            list.push( path.resolve(routerRoot,file) );
+            list.push( { path: path.resolve(routerRoot,file), name: file } );
         }
     }
 
@@ -37,10 +40,12 @@ function parseRouterFiles(routerRoot:string) : string[] {
 }
 
 export default function(app:Koa) {
+
+    Logger.start('parseRouterFiles');
     
     let routerFiles = parseRouterFiles(routerRoot);
 
-    Logger.info( LoggerLevel.SYS , routerFiles );
+    Logger.end('parseRouterFiles');
 
     if ( routerFiles.length == 0 ) {
         let error = new Error('no any router');
@@ -48,10 +53,15 @@ export default function(app:Koa) {
     }
 
     try {
-        routerFiles.forEach((file) => {
-            let UserRouter = require(file);
-            let router = new UserRouter();
+        routerFiles.forEach((routerFile) => {
+
+            Logger.start(`LoadRouter_${routerFile.name}`)
+
+            let UserRouter = require(routerFile.path);
+            let router = new UserRouter.default();
             app.use(router.routes());
+
+            Logger.end(`LoadRouter_${routerFile.name}`);
         });
     } catch ( err ) {
         throw err;

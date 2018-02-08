@@ -15,6 +15,6 @@ export default class ApiRouter extends Router {
     }
 
     registerRoutes() {
-        this.get('/*',this.apiCtrl.name);
+        this.get('/name',this.apiCtrl.name);
     }
 }
