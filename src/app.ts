@@ -4,7 +4,10 @@ import * as Koa from 'koa';
 import * as Router from 'koa-router';
 import appConfig from './config/app';
 import { logger, LOG_TYPES } from './utils/logger';
+import init from './init/init'
 import router from './middleware/router';
+
+init();
 
 const app:Koa = new Koa();
 

@@ -13,6 +13,12 @@ export default {
      * @string
      */
     proxyPort : 8081,
+
+    /**
+     * 路由的跟目录
+     * @string
+     */
+    routerRoot : path.join(__dirname,'../module/router'),
     /**
      * 本地克隆项目的存放路径
      * @string
