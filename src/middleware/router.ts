@@ -60,6 +60,7 @@ export default function(app:Koa) {
             let UserRouter = require(routerFile.path);
             let router = new UserRouter.default();
             app.use(router.routes());
+            app.use(router.allowedMethods());
 
             Logger.end(`LoadRouter_${routerFile.name}`);
         });

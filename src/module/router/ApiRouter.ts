@@ -10,7 +10,7 @@ export default class ApiRouter extends Router {
     constructor() {
         super();
         this.apiCtrl = new ApiController();
-        this.prefix('api');
+        this.prefix('/api');
         this.registerRoutes();
     }
 
