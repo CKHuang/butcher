@@ -10,22 +10,35 @@ export enum RouterMethod {
     HEAD = 'head'
 }
 
+interface IKoaRouter {
+
+}
+
 export class Router extends KoaRouter {
     constructor(...args:any[]) {
        super(...args);
     }
-    private willFire(ctx:KoaRouter.IRouterContext) {
-        Logger.info(LoggerLevel.APP,'willFire router action');
-        Logger.info(LoggerLevel.APP,ctx);
+    private before(ctx:KoaRouter.IRouterContext,next:any) {
+        Logger.info('before router');
+        next();
+    }
+    private after(ctx:KoaRouter.IRouterContext,next:any) {
+        Logger.info('after router');
+        next();
+    }
+    private wrap(action:any,ctx:KoaRouter.IRouterContext,next:any) {
+        Logger.info('fire router');
+        action(ctx);
     }
     add ( method:RouterMethod, path:string, action:KoaRouter.IMiddleware ) {
         let fn;
         switch ( method ) {
-            case RouterMethod.GET  : fn = this.get;break;
-            case RouterMethod.POST : fn = this.post;break;
-            case RouterMethod.ALL  : fn = this.all;break;
-            case RouterMethod.HEAD : fn = this.head;break;
+            case RouterMethod.GET  : fn = super.get;break;
+            case RouterMethod.POST : fn = super.post;break;
+            case RouterMethod.ALL  : fn = super.all;break;
+            case RouterMethod.HEAD : fn = super.head;break;
         }
-        fn && fn(path,action);
+
+        fn && fn.call(this,path,this.before,action,this.after);
     }
 }
