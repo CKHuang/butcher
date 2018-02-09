@@ -29,6 +29,7 @@ export class Router extends KoaRouter {
     private wrap(action:any,ctx:KoaRouter.IRouterContext,next:any) {
         Logger.info('fire router');
         action(ctx);
+        next();
     }
     add ( method:RouterMethod, path:string, action:KoaRouter.IMiddleware ) {
         let fn;
