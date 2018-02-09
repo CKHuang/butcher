@@ -19,7 +19,13 @@ export class Router extends KoaRouter {
         Logger.info(LoggerLevel.APP,ctx);
     }
     add ( method:RouterMethod, path:string, action:KoaRouter.IMiddleware ) {
-        let fn = this[method];
-        fn && fn(path,this.willFire,action);
+        let fn;
+        switch ( method ) {
+            case RouterMethod.GET  : fn = this.get;break;
+            case RouterMethod.POST : fn = this.post;break;
+            case RouterMethod.ALL  : fn = this.all;break;
+            case RouterMethod.HEAD : fn = this.head;break;
+        }
+        fn && fn(path,action);
     }
 }

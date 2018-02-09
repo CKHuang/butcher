@@ -10,6 +10,6 @@ export default class ApiController extends BaseController {
     }
 
     async name(ctx:KoaRouter.IRouterContext) {
-        ctx.body = "Hello World";
+        ctx.body = "Hello World 2";
     }
 }
