@@ -5,8 +5,18 @@ interface IRet {
     error? : Error | null 
 }
 
-export default class Ret {
+export class Ret {
+    private version:string;
     constructor() {
+        this.version = "0.2"
+    }
+    data() {
+        console.log('->data');
+    }
+    json() {
+
+    }
+    html() {
 
     }
 }
