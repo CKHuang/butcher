@@ -1,11 +1,14 @@
 "use strict";
 
-export default abstract class Controller {
-    constructor(...args:any[]) {
-        super(...args);
-    }
+import { Context } from './Context'
 
-    before() {
+export default class Controller {
+    constructor(...args:any[]) {}
+
+    async runController() {
         
+    }
+    async hook(ctx:Context) {
+
     }
 }
