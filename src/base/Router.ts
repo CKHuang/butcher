@@ -45,6 +45,15 @@ export abstract class Router extends KoaRouter {
      * @param method {RouterMethod} 请求方式
      * @param path   {string} 请求的URL规则
      * @param action {IRouterAction} 路由行为action
+     * @example
+     * 1、一般情况
+     * Router.add(method,path,action) : Router
+     * 2、写多个action
+     * Router.add(method,path,action,action) : Router
+     * 3、支持多个请求method
+     * Router.add(method:RouterMethod[],)
+     * 
+     * 
      */
     add( method:RouterMethod, path:string, action:IRouterAction ) {
         let methFn = this[method];
