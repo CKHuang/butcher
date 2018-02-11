@@ -27,13 +27,12 @@ async function timeOutFn2() {
 }
 
 async function name(ctx:KoaRouter.IRouterContext) : Promise<Ret> {
-    console.log('timeOutFn');
     
     let val = await Promise.all([
         timeOutFn(),
         timeOutFn2()
     ]);
-    console.log('timeOutFn2',val);
+    console.log('return val',val);
     ctx.body = "Hello World";
     
     return new Ret();
@@ -44,15 +43,23 @@ export default class ApiRouter extends Router {
      * Api控制器
      * @ApiController
      */
-    private apiCtrl:ApiController;
+    private controller:ApiController;
 
     constructor() {
         super();
-        this.apiCtrl = new ApiController();
+        this.controller = new ApiController();
         this.prefix('/api');
-        this.add(RouterMethod.GET,'/name', name);
         // this.get('/name2',(ctx:KoaRouter.IRouterContext) => {
         //     console.log('-->name2',this);
         // });
+    }
+
+    registerRoutes() {
+        this.add(RouterMethod.GET,'/name', name);
+        this.get('/name',(ctx,next) => {
+            
+        },(ctx) => {
+
+        });
     }
 }

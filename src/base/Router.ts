@@ -15,8 +15,6 @@ export interface IRouterAction {
     ( ctx:KoaRouter.IRouterContext ) : Promise<Ret>
 }
 
-var st;
-
 export abstract class Router extends KoaRouter {
     constructor(...args:any[]) {
        super(...args);
@@ -25,19 +23,18 @@ export abstract class Router extends KoaRouter {
      * 路由行为执行之前
      * @param ctx 
      */
-    abstract async before ( ctx:KoaRouter.IRouterContext ) : Promise<Ret>
+    async before? ( ctx:KoaRouter.IRouterContext ) : Promise<Ret>
      /**
      * 路由行为执行之后
      * @param ctx 
      */
-    abstract async after ( ctx:KoaRouter.IRouterContext ) : Promise<Ret>
+    async after? ( ctx:KoaRouter.IRouterContext ) : Promise<Ret>
     /**
      * 给路由行为包裹一层
      * @param action IRouterAction 路由行为
      */
     private wrap(action:IRouterAction) {
         return async ( ctx:KoaRouter.IRouterContext, next: () => Promise<any> ) => {
-            Logger.info('before wrap');
             let ret = await action(ctx);
             console.log('action->ret',ret);
             await next();
@@ -51,12 +48,19 @@ export abstract class Router extends KoaRouter {
      */
     add( method:RouterMethod, path:string, action:IRouterAction ) {
         let methFn = this[method];
-        methFn && methFn.call(
+        let args : any[] = [];
+        let fns = ['before','after'];
+        args.push(path);
+        if ( typeof this.before == 'function' ) {
+            args.push(this.wrap(this.before));
+        }
+        args.push( this.wrap(action) );
+        if ( typeof this.after == 'function' ) {
+            args.push(this.wrap(this.after));
+        }
+        methFn && methFn.apply(
             this,
-            path,
-            this.wrap(this.before),
-            this.wrap(action),
-            this.wrap(this.after)
+            args
         );
     }
 }

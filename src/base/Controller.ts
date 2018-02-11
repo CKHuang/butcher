@@ -1,7 +1,11 @@
 "use strict";
 
-export default class Controller {
-    constructor() {
+export default abstract class Controller {
+    constructor(...args:any[]) {
+        super(...args);
+    }
+
+    before() {
         
     }
 }
