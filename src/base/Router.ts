@@ -21,16 +21,20 @@ export abstract class Router extends KoaRouter {
     constructor(...args:any[]) {
        super(...args);
     }
-    private before(ctx:KoaRouter.IRouterContext,next:any) {
-        Logger.info('before router');
-        console.time('fired');
-        next();
-    }
-    private after(ctx:KoaRouter.IRouterContext,next:any) {
-        Logger.info('after router');
-        console.timeEnd('fired');
-        next();
-    }
+    /**
+     * 路由行为执行之前
+     * @param ctx 
+     */
+    abstract async before ( ctx:KoaRouter.IRouterContext ) : Promise<Ret>
+     /**
+     * 路由行为执行之后
+     * @param ctx 
+     */
+    abstract async after ( ctx:KoaRouter.IRouterContext ) : Promise<Ret>
+    /**
+     * 给路由行为包裹一层
+     * @param action IRouterAction 路由行为
+     */
     private wrap(action:IRouterAction) {
         return async ( ctx:KoaRouter.IRouterContext, next: () => Promise<any> ) => {
             Logger.info('before wrap');
@@ -50,9 +54,9 @@ export abstract class Router extends KoaRouter {
         methFn && methFn.call(
             this,
             path,
-            this.before,
+            this.wrap(this.before),
             this.wrap(action),
-            this.after
+            this.wrap(this.after)
         );
     }
 }

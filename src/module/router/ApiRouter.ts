@@ -9,7 +9,7 @@ import { Ret } from '../../utils/Ret'
 
 
 async function timeOutFn() {
-    await new Promise( resolve => { 
+    return await new Promise( resolve => { 
         setTimeout(() => {
             console.log('run timeOutFn')
             resolve("res timeOutFn")
@@ -18,7 +18,7 @@ async function timeOutFn() {
 }
 
 async function timeOutFn2() {
-    await new Promise( resolve => { 
+    return await new Promise( resolve => { 
         setTimeout(() => {
             console.log('run timeOutFn2')
             resolve("res timeOutFn2")
