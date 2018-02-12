@@ -1,6 +1,7 @@
 "use strict";
 
 import * as Koa from 'koa'
+import { Exception } from './Exception'
 
 export enum Enviroment {
     DEVELOPMENT = 10,
@@ -22,6 +23,13 @@ export class Application extends Koa {
 
     constructor(...args:any[]) {
         super(...args);
+    }
+
+    /**
+     * unified handler errors,then wrap exception
+     */
+    private _handlerError() {
+        
     }
 
     /**
