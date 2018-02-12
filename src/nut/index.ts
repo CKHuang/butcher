@@ -1,7 +1,4 @@
-import * as Application from './base/Application';
-import * as Controller from './base/Controller';
+"use strict";
 
-export default {
-    "Application" : Application.Application,
-    "ApplicationEnviroment" : Application.Enviroment
-}
+export { Controller } from './base/Controller';
+export { Enviroment , Application } from './base/Application';

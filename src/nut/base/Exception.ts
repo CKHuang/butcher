@@ -60,7 +60,17 @@ export class Exception {
         return this._error.stack;
     }
 
+    /**
+     * @TODO 
+     * output exception info to a string
+     * @param format {string} output rule
+     * @example
+     *      
+     *      exception.toString('message:{message},variables:{variables},stack:{stack}');
+     *          variables and stack will be output before JSON.stringify
+     */
     toString(format:string) {
         let text = "";
+        
     }
 }
