@@ -4,7 +4,6 @@ import * as EventEmitter from 'events'
 import GitClient from './cvs/GitClient';
 import SvnClient from './cvs/SvnClient';
 import { Logger } from '../Logger';
-import config from '../../config/app'
 import Code from '../Code'
 import { Repository } from './cvs/ClientBase';
 import ExtError from './ExtError';
@@ -18,6 +17,17 @@ interface IProject {
 export enum ProjectTypes {
     SVN = 'Svn',
     GIT = 'Git'
+}
+
+const config = {
+    svnAccount : {
+        password : 'hELLOWORLD',
+        username : 'hello'
+    },
+    gitAccount : {
+        password : 'helloworld',
+        username : 'he'
+    }
 }
 
 export class Project extends EventEmitter implements IProject {

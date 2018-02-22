@@ -3,7 +3,6 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import { Application } from '../../base/Application'
-import { Exception } from '../../base/Exception'
 
 /**
  * @example
@@ -53,10 +52,10 @@ function useRouter(app:Application,routerFiles:IRouterFile[]) {
             let Router = require(routerFile.path);
             let router = new Router.default();
             app.use(router.routes());
-            app.use(router.allowMethods());
+            app.use(router.allowedMethods());
         });
     } catch ( err ) {
-        throw new Exception(err);
+        throw err;
     }
 }
 
@@ -89,10 +88,8 @@ function parseRouterFiles(routerRoot:string, prefix:string|null, suffix:string|n
     
     const isExist = fs.existsSync(routerRoot);
 
-    if ( isExist ) {
-        throw new Exception(
-            `${routerRoot} is not exist`
-        );
+    if ( !isExist ) {
+        throw new Error(`${routerRoot} is not exist`);
     }
 
     const files = fs.readdirSync(routerRoot);

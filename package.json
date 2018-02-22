@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "install": "node ./dist/install"
+    "install": "node ./dist/install",
+    "start": "node ./build/app/app.js"
   },
   "repository": {
     "type": "git",
@@ -21,10 +22,12 @@
   "devDependencies": {
     "@types/koa": "^2.0.44",
     "@types/koa-router": "^7.0.27",
+    "@types/koa-views": "^2.0.3",
     "@types/node": "^9.3.0"
   },
   "dependencies": {
     "koa": "^2.0.0-alpha.8",
-    "koa-router": "^7.4.0"
+    "koa-router": "^7.4.0",
+    "koa-views": "^6.1.3"
   }
 }
